@@ -5,6 +5,7 @@
  *      Author: 1
  */
 //#define test_Q
+
 #ifdef test_Q
 class Queue{
 	enum {Q_SIZE = 10};
