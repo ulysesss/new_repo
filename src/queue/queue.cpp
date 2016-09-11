@@ -5,7 +5,6 @@
  *      Author: 1
  */
 //#define test_Q
-
 #ifdef test_Q
 class Queue{
 	enum {Q_SIZE = 10};
@@ -14,7 +13,7 @@ class Queue{
 	public:
 		Queue(int qs = Q_SIZE) ; 			// создание очереди с предельным размером qs
 		~Queue();
-		bool isemptyO const;
+		bool isempty() const;
 		bool isfull() const;
 		int queuecount () const;
 		bool enqueue(const Item &item); 	// добавление элемента в конец
@@ -22,5 +21,5 @@ class Queue{
 };
 
 	Queue linel; 		// очередь с предельным размером 10 элементов
-	Queue line2 (20); 	// очередь с предельным размером 20 элементов => WTF???
+	Queue line2 (20); 	// очередь с предельным размером 20 элементов
 #endif
