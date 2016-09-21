@@ -87,12 +87,10 @@ String::~String() {
 String & String::operator = (const String & st){
 	if (this == &st)
 		return *this;
-
 	delete [] str;			// необходимо освободить ранее выделенную память (так как она выделена при вызовек конструктора)
-	len = st. len;
+	len = st.len;
 	str = new char [len+1] ;
 	std::strcpy(str, st.str);
-
 	return *this;
 }
 
@@ -116,21 +114,75 @@ char & String::operator[] (int i){
 }
 
 // Доступ только для чтения отдельных символов в константном объекте String
-const char & String:: operator [] (int i) const{
+const char & String::operator [] (int i) const{
 	return str [i] ;
 }
 
+// + выполняется к текущему объекту (указатель this)
+// указатель this указывает на объект класса (слева в выражении) к которому прибавляется значение
+String String::operator+ (const String& s){
+	// this - строка к которой прибавляется
+
+		char* this_content = new char [this->len];
+		memcpy(this_content, this->str, this->len);
+
+		char* new_content = new char [s.len+this->len+1];		//
+		/*
+		 * Returns the length of the given byte string, that is,
+		 * the number of characters in a character array whose
+		 * first element is pointed to by str up to and not including the first null character
+		 */
+		memcpy(new_content, this_content, this->len);
+		memcpy(new_content+this->len, s.str,s.len);
+		new_content[s.len+this->len] = '\0';
+		String tmp = new_content;
+		delete [] new_content;
+		delete [] this_content;
+		return tmp;
+}
+
+
+#ifdef hernya
+#ifdef signature_1
+String String::operator + (const String &st1){
+	if (!st1.len)
+		return *this;
+	int size = st1.len+this->len;
+	char result_string_content [size];
+
+	memcpy(result_string_content,  this->str, this->len);
+	memcpy(result_string_content + this->len, st1.str, st1.len);
+	String res_str = String(result_string_content);
+	return res_str;
+}
+#else
+/*
+ *  также возможен такой вид сигнатуры
+ *  Но при передаче по значению создается временная копия st1 => вызывается конструктор копиования
+ */
+String operator+(String st1, const String &st2){
+	int size = st1.len+st2.len;
+	char result_string_content [size];
+
+	memcpy(result_string_content,  st1.str, st1.len);
+	memcpy(result_string_content+st1.len,  st2.str, st2.len);
+	//String res_str = String(result_string_content);
+//	return res_str;
+}
+#endif
+#endif
+
 // Дружественные функции перегруженных операций
-bool operator < (const String &stl, const String &st2){
-	return (std::strcmp(stl.str, st2.str) < 0) ;
+bool operator < (const String &st1, const String &st2){
+	return (std::strcmp(st1.str, st2.str) < 0) ;
 }
 
-bool operator > (const String &stl, const String &st2){
-	return st2.str < stl.str;
+bool operator > (const String &st1, const String &st2){
+	return st2.str < st1.str;
 }
 
-bool operator==(const String &stl, const String &st2){
-	return (std::strcmp(stl.str, st2.str) == 0);
+bool operator==(const String &st1, const String &st2){
+	return (std::strcmp(st1.str, st2.str) == 0);
 }
 
 // Простой вывод String
@@ -154,7 +206,7 @@ istream & operator >> (istream & is, String & st){
  * Test String good
  */
 const int ArSize = 10;
-const int MaxLen =81;
+const int MaxLen = 81;
 
 int Test_String_good (void) {
 
